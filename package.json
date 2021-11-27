@@ -1,5 +1,5 @@
 {
-  "name": "Firebase Admin FCM",
+  "name": "FirebaseAdminFCM",
   "version": "1.0.0",
   "description": "Send Push Notification to Android and iOS",
   "main": "index.js",
