@@ -19,32 +19,8 @@ const port = process.env.PORT || 4321;
 app.use(cors());
 app.use(express.json());
 
-var serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+var serviceAccount = JSON.parse(process.env.RUQYAH_FIREBASE_SERVICE_ACCOUNT)
 
-const topic = "antenna_android";
-
-const message = {
-  data: {
-    title: "Title for android from FAdmin",
-    message: "Body for android from FAdmin",
-    image_url: "",
-    action: "",
-    action_destination: "",
-  },
-  apns: {
-    payload: {
-      aps: {
-        alert: {
-          title: "Title for iOS from FAdmin",
-          body: "Body for iOS from FAdmin",
-        },
-        category: "nils",
-        "mutable-content": 0,
-      },
-    },
-  },
-  topic: topic,
-};
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -55,7 +31,86 @@ app.get("/", (req, res) => {
   res.send("Firebase Admin is running");
 });
 
-app.get("/send-upush", (req, res) => {
+app.get("/send-dev", (req, res) => {
+  console.log(req.query.t)
+  console.log(req.query.m)
+  console.log(req.query.action)
+  console.log(req.query.ad)
+
+  const topic = "masnun_amol_dev";
+
+  const message = {
+    data: {
+      title: req.query.t,
+      message: req.query.m,
+      image_url: "",
+      action: req.query.action ?? "",
+      action_destination: req.query.ad ?? "",
+    },
+    apns: {
+      payload: {
+        aps: {
+          alert: {
+            title: req.query.t,
+            body: req.query.m,
+          },
+          category: "nils",
+          "mutable-content": 0  
+        },
+      },
+    },
+    topic: topic,
+  };
+
+
+
+  admin
+    .messaging()
+    .send(message)
+    .then((response) => {
+      // Response is a message ID string.
+      console.log("Successfully sent message:", response);
+      res.send(`Successfully sent message: ${response}`);
+    })
+    .catch((error) => {
+      console.log("Error sending message:", error);
+      res.send(`Error sending message: ${error}`);
+    });
+});
+
+app.get("/send", (req, res) => {
+  console.log(req.query.t)
+  console.log(req.query.m)
+  console.log(req.query.action)
+  console.log(req.query.ad)
+
+  const topic = "masnun_amol";
+
+  const message = {
+    data: {
+      title: req.query.t,
+      message: req.query.m,
+      image_url: "",
+      action: req.query.action ?? "",
+      action_destination: req.query.ad ?? "",
+    },
+    apns: {
+      payload: {
+        aps: {
+          alert: {
+            title: req.query.t,
+            body: req.query.m,
+          },
+          category: "nils",
+          "mutable-content": 0  
+        },
+      },
+    },
+    topic: topic,
+  };
+
+
+
   admin
     .messaging()
     .send(message)
